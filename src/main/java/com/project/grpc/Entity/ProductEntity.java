@@ -24,9 +24,25 @@ public class ProductEntity {
     public ProductEntity() {
     }
 
-    public ProductEntity(String name, String description, BigDecimal price) {
+    public ProductEntity(String name, String description, Float price) {
         this.name = name;
         this.description = description;
-        this.price = price;
+        this.price = new BigDecimal(price.intValue());
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
     }
 }

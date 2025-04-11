@@ -7,12 +7,13 @@ option java_package = "com.example.grpc";
 option java_outer_classname = "ProductProto";
 
 service ProductService {
-  rpc SayHello (EmptyRequest) returns (HelloResponse);
-  rpc ProductById (IdRequest) returns (HelloResponse);
+  rpc createProduct (CreateProductRequest) returns (IdRequest);
 }
 
-message ProductRequest {
-  int64 id = 1;
+message CreateProductRequest{
+  string name = 1;
+  string description = 2;
+  float price = 3;
 }
 
 message IdRequest{
@@ -22,10 +23,6 @@ message IdRequest{
   float price = 4;
 }
 
-message EmptyRequest {}
 
-message HelloResponse {
-  string message = 1;
-}
 
 

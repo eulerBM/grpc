@@ -1,28 +1,34 @@
 package com.project.grpc;
 
-import com.example.grpc.EmptyRequest;
-import com.example.grpc.HelloResponse;
+import com.example.grpc.IdRequest;
 import com.example.grpc.ProductServiceGrpc;
 import com.project.grpc.Entity.ProductEntity;
 import com.project.grpc.Repository.ProductRepository;
+import com.example.grpc.CreateProductRequest;
 import io.grpc.stub.StreamObserver;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.grpc.server.service.GrpcService;
 
 @GrpcService
 public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBase{
 
-    @Autowired
     private final ProductRepository productRepository;
 
     public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
-
+    
     @Override
-    public void sayHello(EmptyRequest request, StreamObserver<HelloResponse> responseObserver) {
-        HelloResponse response = HelloResponse.newBuilder()
-                .setMessage("hi world, iam Euler!")
+    public void createProduct(CreateProductRequest request, StreamObserver<IdRequest> responseObserver) {
+
+        ProductEntity product = new ProductEntity(request.getName(), request.getDescription(), request.getPrice());
+
+        productRepository.save(product);
+
+        IdRequest response = IdRequest.newBuilder()
+                .setId(product.getId())
+                .setName(product.getName())
+                .setDescription(product.getDescription())
+                .setPrice(product.getPrice().floatValue())
                 .build();
 
         responseObserver.onNext(response);
@@ -30,33 +36,17 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
     }
 
     @Override
-    public void getAll(CreateProductRequest request, StreamObserver<HelloResponse> responseObserver) {
+    public void getAllProduct(CreateProductRequest request, StreamObserver<IdRequest> responseObserver) {
 
-        ProductEntity product = new ProductEntity()
-        HelloResponse response = HelloResponse.newBuilder()
-                .setMessage("hi world, iam Euler!")
-                .build();
+        ProductEntity product = new ProductEntity(request.getName(), request.getDescription(), request.getPrice());
 
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
-    }
+        productRepository.save(product);
 
-    @Override
-    public void createProduct(CreateProductRequest request, StreamObserver<HelloResponse> responseObserver) {
-
-        ProductEntity product = new ProductEntity()
-        HelloResponse response = HelloResponse.newBuilder()
-                .setMessage("hi world, iam Euler!")
-                .build();
-
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
-    }
-
-    @Override
-    public void ProductById(IdRequest request, StreamObserver<HelloResponse> responseObserver) {
-        HelloResponse response = HelloResponse.newBuilder()
-                .setMessage("hi world, iam Euler!")
+        IdRequest response = IdRequest.newBuilder()
+                .setId(product.getId())
+                .setName(product.getName())
+                .setDescription(product.getDescription())
+                .setPrice(product.getPrice().floatValue())
                 .build();
 
         responseObserver.onNext(response);
