@@ -2,11 +2,16 @@ package com.project.grpc;
 
 import com.example.grpc.IdRequest;
 import com.example.grpc.ProductServiceGrpc;
+import com.example.grpc.idProductRequest;
 import com.project.grpc.Entity.ProductEntity;
 import com.project.grpc.Repository.ProductRepository;
+
 import com.example.grpc.CreateProductRequest;
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import org.springframework.grpc.server.service.GrpcService;
+
+import java.util.Optional;
 
 @GrpcService
 public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBase{
@@ -36,11 +41,20 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
     }
 
     @Override
-    public void getAllProduct(CreateProductRequest request, StreamObserver<IdRequest> responseObserver) {
+    public void getProductById(idProductRequest request, StreamObserver<IdRequest> responseObserver) {
 
-        ProductEntity product = new ProductEntity(request.getName(), request.getDescription(), request.getPrice());
+        Optional<ProductEntity> productById = productRepository.findById(request.getId());
 
-        productRepository.save(product);
+        if (productById.isEmpty()) {
+            responseObserver.onError(
+                    Status.NOT_FOUND
+                            .withDescription("Produto com ID " + request.getId() + " não encontrado.")
+                            .asRuntimeException()
+            );
+            return;
+        }
+
+        ProductEntity product = productById.get();
 
         IdRequest response = IdRequest.newBuilder()
                 .setId(product.getId())
