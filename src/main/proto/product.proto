@@ -9,12 +9,29 @@ option java_outer_classname = "ProductProto";
 service ProductService {
   rpc createProduct (CreateProductRequest) returns (IdRequest);
   rpc getProductById (idProductRequest) returns (IdRequest);
+  rpc getAllProducts (nameProductRequest) returns (ProductListResponse);
+  rpc changeProduct (ProductRequest) returns (IdRequest);
+}
+
+message nameProductRequest{
+  string name = 1;
+}
+
+message ProductListResponse {
+  repeated IdRequest products = 1;
 }
 
 message CreateProductRequest{
   string name = 1;
   string description = 2;
   float price = 3;
+}
+
+message ProductRequest{
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  float price = 4;
 }
 
 message idProductRequest{
