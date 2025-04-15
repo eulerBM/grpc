@@ -60,7 +60,7 @@ cd grpc</code></pre>
         <pre><code>./gradlew run</code></pre>
       </li>
       <li><strong>Execute o cliente gRPC:</strong>
-        <p>(Instruções específicas para executar o cliente devem ser fornecidas aqui, dependendo da implementação.)</p>
+    
       </li>
     </ol>
   </div>
