@@ -2,7 +2,6 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>gRPC CRUD Service</title>
 </head>
 <body>
 
