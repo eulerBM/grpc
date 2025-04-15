@@ -59,9 +59,6 @@ cd grpc</code></pre>
       <li><strong>Execute o servidor gRPC:</strong>
         <pre><code>./gradlew run</code></pre>
       </li>
-      <li><strong>Execute o cliente gRPC:</strong>
-    
-      </li>
     </ol>
   </div>
 
