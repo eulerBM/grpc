@@ -1,6 +1,7 @@
 package com.project.grpc;
 
 import com.example.grpc.*;
+import com.google.common.base.Verify;
 import com.project.grpc.Entity.ProductEntity;
 import com.project.grpc.Repository.ProductRepository;
 
@@ -8,6 +9,7 @@ import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import org.springframework.grpc.server.service.GrpcService;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,16 +72,27 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
 
         Optional<ProductEntity> productById = productRepository.findById(request.getId());
 
-        if (productById.isEmpty()) {
-            responseObserver.onError(
-                    Status.NOT_FOUND
-                            .withDescription("Produto com ID " + request.getId() + " não encontrado.")
-                            .asRuntimeException()
-            );
-            return;
+        ProductEntity product = productById.get();
+
+        if(!request.getName().isEmpty()){
+
+            product.setName(request.getName());
+
         }
 
-        ProductEntity product = productById.get();
+        if(!request.getDescription().isEmpty()){
+
+            product.setDescription(request.getDescription());
+
+        }
+
+        if(request.getPrice() > 1){
+
+            product.setPrice(new BigDecimal(request.getPrice()));
+
+        }
+
+        productRepository.save(product);
 
         IdRequest response = IdRequest.newBuilder()
                 .setId(product.getId())
@@ -119,6 +132,29 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
             responseBuilder.addProducts(productProto);
         }
         responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void deleteProduct(idProduct request, StreamObserver<messageDelete> responseObserver) {
+
+        if (request.getId() <= 0){
+            responseObserver.onError(
+                    Status.INVALID_ARGUMENT
+                            .withDescription("Produto com nome " + request.getId() + " não encontrado.")
+                            .asRuntimeException()
+            );
+
+        }
+
+        productRepository.deleteById(request.getId());
+
+
+        messageDelete response = messageDelete.newBuilder()
+                .setMessage("product with id " + request.getId() + " deleted")
+                .build();
+
+        responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
 }

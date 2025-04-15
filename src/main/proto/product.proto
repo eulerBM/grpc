@@ -11,6 +11,7 @@ service ProductService {
   rpc getProductById (idProductRequest) returns (IdRequest);
   rpc getAllProducts (nameProductRequest) returns (ProductListResponse);
   rpc changeProduct (ProductRequest) returns (IdRequest);
+  rpc deleteProduct (idProduct) returns (messageDelete);
 }
 
 message nameProductRequest{
@@ -19,6 +20,14 @@ message nameProductRequest{
 
 message ProductListResponse {
   repeated IdRequest products = 1;
+}
+
+message idProduct {
+  int64 id = 1;
+}
+
+message messageDelete {
+  string message = 1;
 }
 
 message CreateProductRequest{
