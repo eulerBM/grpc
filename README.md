@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
 </head>
 <body>
-
   <h1>gRPC CRUD Service</h1>
 
   <p>Este projeto demonstra como desenvolver uma aplicação simples de CRUD (Create, Read, Update, Delete) utilizando gRPC. O serviço gerencia uma coleção de itens, como registros de usuários, produtos ou notas, estabelecendo uma comunicação eficiente entre cliente e servidor.</p>
